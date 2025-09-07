@@ -1,0 +1,501 @@
+:root{
+  --bg:#f3f7fb;
+  --card:#ffffff;
+  --muted:#6c7a89;
+  --text:#1f2937;
+  --brand:#4aa3ff;
+  --shadow:0 4px 16px rgba(0,0,0,.07);
+  --radius:18px;
+}
+
+/* --- Base & Reset --- */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font:400 15px/1.45 system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans", sans-serif;
+}
+img{max-width:100%;display:block}
+
+/* --- Header --- */
+.header{
+  position:sticky; top:0; z-index:20;
+  background:var(--card);
+  box-shadow:var(--shadow);
+}
+.header .bar{
+  padding:12px 20px;
+  display:flex; align-items:center; gap:16px;
+}
+.logo{
+  display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.3px;
+}
+.logo .mark{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--brand),#8ad0ff)}
+.header nav{margin-left:auto; display:flex; gap:22px; align-items:center}
+.header nav a{
+  text-decoration:none; color:var(--muted); padding:8px 10px; border-radius:10px;
+  font-weight: 500;
+}
+.header nav a.active{color:var(--text); background:rgba(74,163,255,.14)}
+.header .meta{color:var(--muted); font-size:13px}
+.time-weather {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* --- Layout --- */
+.container {
+  max-width: 1600px;
+  margin: 22px auto;
+  padding: 0 20px;
+}
+.grid {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: 1.2fr 0.9fr 1.4fr;
+  grid-template-rows: 450px 250px;
+  grid-template-areas:
+    "gnss calendar map"
+    "notice gauges todo";
+}
+.card{
+  background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:16px 16px; display:flex; flex-direction:column; min-height:0;
+  position: relative;
+}
+.card h3{margin:0 0 10px; font-size:16px; letter-spacing:.2px}
+
+/* --- Grid Area Mapping --- */
+.panel-gnss{grid-area:gnss}
+.panel-calendar{
+  grid-area:calendar;
+  /* Portal을 사용하므로 더 이상 z-index나 overflow 강제 설정이 필요 없습니다. */
+}
+.panel-map{grid-area:map}
+.panel-notice{grid-area:notice}
+.panel-gauges{grid-area:gauges}
+.panel-todo{grid-area:todo}
+
+/* --- Chart & Map --- */
+.chartbox, .mapbox{
+  flex:1;
+  border-radius:14px;
+  background:#eef3f8;
+  /* overflow:hidden; */
+  display:flex; align-items:center; justify-content:center;
+}
+.chartbox img, .mapbox img{ width:100%; height:100%; object-fit:cover; }
+
+/* --- Other Panels --- */
+.notice{ display:flex; gap:12px; align-items:flex-start; color:#334155 }
+.notice .icon{width:32px;height:32px;border-radius:10px;background:var(--brand); opacity:.9}
+.notice .body{font-size:14px}
+.notice time{display:block; color:var(--muted); font-size:12px; margin-top:4px}
+.badge{display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; font-weight:700; font-size:12px}
+.badge.warn{background:rgba(243,156,18,.15); color:#b06a00}
+
+.gauges{ display:grid; grid-template-columns:1fr 1fr; gap:14px; flex:1 }
+.gauge{ background:linear-gradient(180deg,#f8fbff,#f3f6fb); border-radius:16px; padding:14px; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.gauge .dial{width:150px;height:90px;border-top-left-radius:150px;border-top-right-radius:150px;background:#eef3f6; position:relative; overflow:hidden}
+.gauge .dial::after{content:""; position:absolute; bottom:-60px; left:50%; width:4px; height:120px; background:#2d3748; transform-origin:bottom center; transform:rotate(-35deg) translateX(-50%)}
+.gauge.ok .dial{background:rgba(46,204,113,.25)}
+.gauge.warn .dial{background:rgba(243,156,18,.28)}
+.gauge .label{margin-top:10px; font-weight:700}
+
+.todo{display:flex; flex-direction:column; gap:10px}
+.todo .item{display:flex; gap:10px; align-items:center; padding:10px 12px; border-radius:12px; background:#f0f5fb}
+.todo .time{font-weight:700; min-width:64px}
+.todo .tag{margin-left:auto; font-size:12px; color:#fff; background:var(--brand); padding:4px 8px; border-radius:999px}
+
+
+/* =================================================================
+ * React Calendar Custom Styles
+ * ================================================================= */
+.calendar-container { width: 100%; height: 100%; padding-top: 5px; }
+.react-calendar { width: 100%; border: none; background: none; font-family: inherit; }
+
+/* --- Navigation --- */
+.react-calendar__navigation { display: flex; height: 44px; margin-bottom: 0.5em; }
+.react-calendar__navigation button { min-width: 44px; background: none; border: none; color: var(--brand); font-size: 1.2rem; cursor: pointer; }
+.react-calendar__navigation button:hover { background-color: #f0f5fb; border-radius: 8px; }
+.react-calendar__navigation__label { font-weight: bold; font-size: 1rem; pointer-events: none; }
+
+/* --- Weekdays --- */
+.react-calendar__month-view__weekdays { text-align: center; font-weight: 600; font-size: 0.8em; color: var(--muted); }
+.react-calendar__month-view__weekdays abbr { text-decoration: none; }
+
+/* --- Date Tiles --- */
+.react-calendar__tile { text-align: center; padding: 0.75em 0.5em; background: none; border: none; height: 52px; font-size: 0.9em; position: relative; cursor: default; }
+.react-calendar__tile--now { background: none; font-weight: 700; }
+.react-calendar__tile--now abbr { color: white; position: relative; z-index: 1; }
+.react-calendar__tile--now::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 32px; height: 32px; border-radius: 50%; background-color: var(--brand); box-shadow: 0 2px 12px rgba(74, 163, 255, 0.6); }
+
+
+/* --- Status Dot & Tooltip --- */
+/* 이벤트 감지를 위한 wrapper 스타일 */
+.tile-event-wrapper {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  /* z-index를 추가하여 '오늘' 날짜의 파란 원 위에 위치하도록 보장 */
+  z-index: 2;
+}
+
+.tile-content-wrapper { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; justify-content: center; flex-direction: column; align-items: center; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; position: absolute; left: 50%; transform: translateX(-50%); z-index: 1; }
+.react-calendar__tile--now .status-dot { outline: 1.5px solid white; }
+
+/* Portal 방식에 맞게 수정된 툴팁 스타일 */
+.log-tooltip {
+  /* JS로 좌표를 설정하므로 position은 absolute 또는 fixed */
+  position: absolute;
+  /* JS가 설정한 left 좌표를 기준으로 중앙 정렬 */
+  transform: translateX(-50%);
+  background-color: var(--text);
+  color: var(--bg);
+  padding: 8px 12px;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  /* 모든 요소 위에 표시되도록 z-index를 매우 높게 설정 */
+  z-index: 9999;
+  width: max-content;
+  pointer-events: none; /* 마우스 이벤트가 통과되도록 설정 */
+}
+
+.tooltip-item { display: flex; flex-direction: column; align-items: flex-start; font-size: 12px; white-space: nowrap; }
+.tooltip-item + .tooltip-item { margin-top: 6px; padding-top: 6px; border-top: 1px solid #4a5567; }
+.tooltip-time { font-weight: 600; }
+.tooltip-impact { font-weight: 400; }
+.impact-text { font-weight: 700; margin-left: 4px; }
+.impact-text-정상 { color: #4ade80; }
+.impact-text-주의 { color: #facc15; }
+.impact-text-위험 { color: #f87171; }
+
+/* Dot Colors */
+.c-lv0 { background: #4CAF50; }
+.c-lv1 { background: #FFEB3B; }
+.c-lv2 { background: #FFA726; }
+.c-lv3 { background: #F44336; }
+
+/* --- Feedback Form Styles --- */
+.back-button { background: none; border: none; color: var(--muted); cursor: pointer; padding: 4px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.back-button:hover { background-color: var(--bg); }
+.form-label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+.form-input { width: 100%; background-color: var(--bg); border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px; font-size: 15px; color: var(--text); }
+.form-input:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 2px rgba(74, 163, 255, 0.2); }
+.impact-buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.impact-button { padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; font-weight: 600; cursor: pointer; background-color: #fff; transition: all 0.2s ease; }
+.impact-button:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.impact-button.impact-정상 { background: #dcfce7; color: #166534; border-color: #bbf7d0; }
+.impact-button.impact-주의 { background: #fef9c3; color: #854d0e; border-color: #fde68a; }
+.impact-button.impact-위험 { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
+.submit-button { background-color: var(--brand); color: white; font-weight: 700; border: none; border-radius: 8px; padding: 12px 20px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background-color 0.2s ease; }
+.submit-button:hover { background-color: #3b82f6; }
+
+/* --- Responsive --- */
+@media (max-width: 1100px){
+  .grid{grid-template-columns:1.2fr .9fr; grid-template-rows:auto; grid-template-areas:
+    "gnss calendar" "map map" "notice gauges" "todo todo";}
+}
+@media (max-width: 720px){
+  .header .bar{flex-wrap:wrap}
+  .header nav{order:3; width:100%; overflow:auto}
+  .grid{grid-template-columns:1fr; grid-template-areas:
+    "gnss" "calendar" "map" "notice" "gauges" "todo";}
+  .gauges{grid-template-columns:1fr}
+}
+
+/* --- Weapon Systems Page (Log View) --- */
+.log-card {
+  margin-bottom: 22px;
+}
+
+.log-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.log-item {
+  display: grid;
+  grid-template-columns: 80px 1fr 80px;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background-color: #f0f5fb;
+  font-size: 14px;
+}
+
+.log-time {
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.log-equipment {
+  font-weight: 500;
+}
+
+.log-impact {
+  font-weight: 700;
+  text-align: right;
+}
+
+/* --- Calendar Legend --- */
+.calendar-legend-container {
+  /* .panel-calendar 카드 내에서 절대 위치를 사용 */
+  position: absolute;
+  bottom: 16px; /* 카드 하단 패딩과 맞춤 */
+  right: 16px;  /* 카드 우측 패딩과 맞춤 */
+
+  /* 범례 아이템들을 정렬 */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end; /* 아이템들을 오른쪽으로 정렬 */
+  gap: 4px 12px;
+  max-width: 70%; /* 범례가 너무 길어지지 않도록 너비 제한 */
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* --- Feedback Form Styles (Additions) --- */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* 화면이 작아지면 세로로 배치 */
+@media (max-width: 500px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =================================================================
+ * Settings Page Styles (NEW)
+ * ================================================================= */
+.settings-card {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--bg);
+}
+
+.settings-header h3 {
+  margin: 0 0 0 1rem;
+  font-size: 1.1rem;
+}
+
+.settings-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.setting-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.setting-section h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eef3f8;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.radio-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.radio-group button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: #fff;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.radio-group button.active {
+  background-color: rgba(74,163,255,.14);
+  color: var(--brand);
+  border-color: var(--brand);
+}
+
+.settings-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--bg);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* --- ToDo Panel Header --- */
+.panel-todo .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.panel-todo .header h3 {
+  margin: 0;
+}
+
+.add-activity-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--brand);
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.add-activity-btn:hover {
+  background-color: rgba(74, 163, 255, 0.1);
+}
+
+/* --- ToDo Item --- */
+.todo .item {
+  position: relative; /* For dropdown positioning */
+}
+
+.item-menu-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 4px;
+  border-radius: 50%;
+}
+.item-menu-btn:hover {
+  background-color: #e2e8f0;
+}
+
+.item-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 10px;
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 6px;
+  z-index: 10;
+  width: 100px;
+  border: 1px solid var(--bg);
+}
+
+.item-dropdown button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: left;
+}
+.item-dropdown button:hover {
+  background-color: var(--bg);
+}
+.item-dropdown button.delete {
+  color: #ef4444;
+}
+
+/* --- Activity Modal --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: var(--card);
+  padding: 24px;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 30px rgba(0,0,0,.1);
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+.modal-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 4px;
+  border-radius: 50%;
+}
+.modal-close-btn:hover {
+  background-color: var(--bg);
+}
